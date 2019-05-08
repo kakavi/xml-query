@@ -6,7 +6,7 @@
 /classes/
 wrapper/
 bin/
-.gradle/**
+.gradle/
 build
 .DS_Store
 *.iml
