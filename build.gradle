@@ -1,16 +1,14 @@
 plugins {
     id 'groovy'
     id 'java'
+    id 'net.researchgate.release' version '2.6.0'
+    id 'maven'
 }
 
 group 'xml-query'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
-
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'groovy'
 
 // Using a setter method
 project.buildDir = 'target'
@@ -33,4 +31,22 @@ repositories {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+configurations { deployerJars }
+
+dependencies {
+    deployerJars 'org.apache.maven.wagon:wagon-ssh:2.12'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            configuration = configurations.deployerJars
+            String repo = version.endsWith('SNAPSHOT') ? 'scp://omnitech.co.ug/home/maven/m2repo/snapshots' : 'scp://omnitech.co.ug/home/maven/m2repo/releases'
+            repository(url: repo) {
+                authentication(userName: project.findProperty('deployU') ?: "", password: project.findProperty('deployP') ?: "")
+            }
+        }
+    }
 }
