@@ -44,8 +44,26 @@ class XQL {
             p."${nodeToUpdate}"[0].value = newValue
         }
         def stringWriter = new StringWriter()
-        new XmlNodePrinter(new PrintWriter(stringWriter)).print(xml)
+        def nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter),"")
+        nodePrinter.setNamespaceAware(true)
+        nodePrinter.print(xml)
         def newXml = stringWriter.toString()
+        return newXml
+    }
+
+    String queryOneString() {
+        def xml = new XmlParser().parseText(xmlString)
+        xml.depthFirst().findAll { p ->
+            if (!p."$conditionNode") return
+            p."${conditionNode}"[0].text().equals(oldValue)
+        }.each { p ->
+            p."${nodeToUpdate}"[0].value = newValue
+        }
+        def stringWriter = new StringWriter()
+        def nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter),"")
+        nodePrinter.setNamespaceAware(true)
+        nodePrinter.print(xml)
+        def newXml = stringWriter.toString().readLines().join()
         return newXml
     }
 

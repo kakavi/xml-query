@@ -27,63 +27,61 @@ class XQLTest {
         """
 
     static String xmlWithRepeats = """<issd_project_planting_returns_form_v1 id="13" name="Planting Returns Form">
-                    <instruction/>
-                    <season>_2019a</season>
-                    <crop>cassava</crop>
-                    <variety_cassava>narocase_1</variety_cassava>
-                    <seed_class>foundation_seed</seed_class>
-                    <planting_returns>
-                            <farmer/>
-                            <farmer_name>Owiny Bruno</farmer_name>
-                            <__code>WPK6063/0003</__code>
-                            <lsb_name>Pokwero</lsb_name>
-                            <partner>WENIPS</partner>
-                            <district>pakwach</district>
-                            <subcounty>panyango</subcounty>
-                            <zone>westnile</zone>
-                            <arceage>1.0</arceage>
-                            <quantity_planted_bags>6.0</quantity_planted_bags>
-                            <planting_date>2019-04-06</planting_date>
-                    </planting_returns>
-                    <planting_returns>
-                            <farmer/>
-                            <farmer_name>Alli Quirino</farmer_name>
-                            <__code>WPK6063/0006</__code>
-                            <lsb_name>Pokwero</lsb_name>
-                            <partner>WENIPS</partner>
-                            <district>pakwach</district>
-                            <subcounty>panyango</subcounty>
-                            <zone>westnile</zone>
-                            <arceage>1.0</arceage>
-                            <quantity_planted_bags>6.0</quantity_planted_bags>
-                            <planting_date>2019-04-09</planting_date>
-                    </planting_returns>
-                    <planting_returns>
-                            <farmer/>
-                            <farmer_name>BLOCK_Pokwero</farmer_name>
-                            <__code>WPK6063/0046</__code>
-                            <lsb_name>Pokwero</lsb_name>
-                            <partner>WENIPS</partner>
-                            <district>pakwach</district>
-                            <subcounty>panyango</subcounty>
-                            <zone>westnile</zone>
-                            <arceage>8.0</arceage>
-                            <quantity_planted_bags>48.0</quantity_planted_bags>
-                            <planting_date>2019-04-03</planting_date>
-                    </planting_returns>
-                    <date>2019-04-30 01:24:51 PM</date>
-                    <unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
-                    </issd_project_planting_returns_form_v1>
-
-                """
+<instruction/>
+<season>_2019a</season>
+<crop>cassava</crop>
+<variety_cassava>narocase_1</variety_cassava>
+<seed_class>foundation_seed</seed_class>
+<planting_returns>
+<farmer/>
+<farmer_name>Owiny Bruno</farmer_name>
+<__code>WPK6063/0003</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>pakwach</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>1.0</arceage>
+<quantity_planted_bags>6.0</quantity_planted_bags>
+<planting_date>2019-04-06</planting_date>
+</planting_returns>
+<planting_returns>
+<farmer/>
+<farmer_name>Alli Quirino</farmer_name>
+<__code>WPK6063/0006</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>pakwach</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>1.0</arceage>
+<quantity_planted_bags>6.0</quantity_planted_bags>
+<planting_date>2019-04-09</planting_date>
+</planting_returns>
+<planting_returns>
+<farmer/>
+<farmer_name>BLOCK_Pokwero</farmer_name>
+<__code>WPK6063/0046</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>pakwach</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>8.0</arceage>
+<quantity_planted_bags>48.0</quantity_planted_bags>
+<planting_date>2019-04-03</planting_date>
+</planting_returns>
+<date>2019-04-30 01:24:51 PM</date>
+<unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
+</issd_project_planting_returns_form_v1>"""
 
     @Before
-    void setUp(){
+    void setUp() {
 //
     }
 
     @Test
-    void testUpdate(){
+    void testUpdate() {
         def xql = new XQL('lsb_search')
                 .update(stringXML)
                 .set('lsb')
@@ -135,7 +133,7 @@ class XQLTest {
     }
 
     @Test
-    void testUpdateWithDepthFirst(){
+    void testUpdateWithDepthFirst() {
         def xql = new XQL()
                 .update(stringXML)
                 .set('lsb')
@@ -187,7 +185,7 @@ class XQLTest {
     }
 
     @Test
-    void testUpdateFormDataWithRepeats(){
+    void testUpdateFormDataWithRepeats() {
         def xql = new XQL('planting_returns')
                 .update(xmlWithRepeats.trim())
                 .set('district')
@@ -197,132 +195,59 @@ class XQLTest {
         def newxml = xql.query()
 
         def expected = """<issd_project_planting_returns_form_v1 id="13" name="Planting Returns Form">
-  <instruction/>
-  <season>
-    _2019a
-  </season>
-  <crop>
-    cassava
-  </crop>
-  <variety_cassava>
-    narocase_1
-  </variety_cassava>
-  <seed_class>
-    foundation_seed
-  </seed_class>
-  <planting_returns>
-    <farmer/>
-    <farmer_name>
-      Owiny Bruno
-    </farmer_name>
-    <__code>
-      WPK6063/0003
-    </__code>
-    <lsb_name>
-      Pokwero
-    </lsb_name>
-    <partner>
-      WENIPS
-    </partner>
-    <district>
-      kakabouy
-    </district>
-    <subcounty>
-      panyango
-    </subcounty>
-    <zone>
-      westnile
-    </zone>
-    <arceage>
-      1.0
-    </arceage>
-    <quantity_planted_bags>
-      6.0
-    </quantity_planted_bags>
-    <planting_date>
-      2019-04-06
-    </planting_date>
-  </planting_returns>
-  <planting_returns>
-    <farmer/>
-    <farmer_name>
-      Alli Quirino
-    </farmer_name>
-    <__code>
-      WPK6063/0006
-    </__code>
-    <lsb_name>
-      Pokwero
-    </lsb_name>
-    <partner>
-      WENIPS
-    </partner>
-    <district>
-      pakwach
-    </district>
-    <subcounty>
-      panyango
-    </subcounty>
-    <zone>
-      westnile
-    </zone>
-    <arceage>
-      1.0
-    </arceage>
-    <quantity_planted_bags>
-      6.0
-    </quantity_planted_bags>
-    <planting_date>
-      2019-04-09
-    </planting_date>
-  </planting_returns>
-  <planting_returns>
-    <farmer/>
-    <farmer_name>
-      BLOCK_Pokwero
-    </farmer_name>
-    <__code>
-      WPK6063/0046
-    </__code>
-    <lsb_name>
-      Pokwero
-    </lsb_name>
-    <partner>
-      WENIPS
-    </partner>
-    <district>
-      pakwach
-    </district>
-    <subcounty>
-      panyango
-    </subcounty>
-    <zone>
-      westnile
-    </zone>
-    <arceage>
-      8.0
-    </arceage>
-    <quantity_planted_bags>
-      48.0
-    </quantity_planted_bags>
-    <planting_date>
-      2019-04-03
-    </planting_date>
-  </planting_returns>
-  <date>
-    2019-04-30 01:24:51 PM
-  </date>
-  <unique_id>
-    uuid:30263fff-af7e-4443-a048-d1cc7a178afe
-  </unique_id>
-</issd_project_planting_returns_form_v1>
-"""
+<instruction/>
+<season>_2019a</season>
+<crop>cassava</crop>
+<variety_cassava>narocase_1</variety_cassava>
+<seed_class>foundation_seed</seed_class>
+<planting_returns>
+<farmer/>
+<farmer_name>Owiny Bruno</farmer_name>
+<__code>WPK6063/0003</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>kakabouy</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>1.0</arceage>
+<quantity_planted_bags>6.0</quantity_planted_bags>
+<planting_date>2019-04-06</planting_date>
+</planting_returns>
+<planting_returns>
+<farmer/>
+<farmer_name>Alli Quirino</farmer_name>
+<__code>WPK6063/0006</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>pakwach</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>1.0</arceage>
+<quantity_planted_bags>6.0</quantity_planted_bags>
+<planting_date>2019-04-09</planting_date>
+</planting_returns>
+<planting_returns>
+<farmer/>
+<farmer_name>BLOCK_Pokwero</farmer_name>
+<__code>WPK6063/0046</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>pakwach</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>8.0</arceage>
+<quantity_planted_bags>48.0</quantity_planted_bags>
+<planting_date>2019-04-03</planting_date>
+</planting_returns>
+<date>2019-04-30 01:24:51 PM</date>
+<unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
+</issd_project_planting_returns_form_v1>"""
 
         assertTrue newxml.equals(expected)
     }
 
     @Test
-    void testUpdateFormDataWithRepeatsUsingDepthFirst(){
+    void testUpdateFormDataWithRepeatsUsingDepthFirst() {
 
         def xql = new XQL()
                 .update(xmlWithRepeats.trim())
@@ -456,4 +381,23 @@ class XQLTest {
 
         assertTrue newxml.equals(expected)
     }
+
+    @Test
+    void testUpdateDoesntDeformXML() {
+        def cleanXml = """<people><person><name>kaka</name></person></people>"""
+
+        def expected = """<people><person><name>martin</name></person></people>"""
+        def xql = new XQL()
+                .update(cleanXml.trim())
+                .set('name')
+                .to('martin')
+                .where('name')
+                .isEqualTo('kaka')
+        def newxml = xql.queryOneString()
+        println newxml
+
+        assertTrue newxml.equals(expected)
+    }
+
+
 }
