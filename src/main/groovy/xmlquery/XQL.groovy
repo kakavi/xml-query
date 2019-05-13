@@ -1,5 +1,9 @@
 package xmlquery
 
+import groovy.xml.DOMBuilder
+import groovy.xml.XmlUtil
+import groovy.xml.dom.DOMCategory
+
 class XQL {
 
     String xmlString
@@ -28,7 +32,7 @@ class XQL {
             p."${nodeToUpdate}"[0].value = newValue
         }
         def stringWriter = new StringWriter()
-        def nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter),"")
+        def nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter), "")
         nodePrinter.setNamespaceAware(true)
         nodePrinter.print(xml)
         def newXml = stringWriter.toString()
@@ -36,7 +40,7 @@ class XQL {
     }
 
     String queryAsOneString() {
-        def xml = new XmlParser().parseText(xmlString)
+        def xml = new XmlParser(false, true).parseText(xmlString)
         xml.depthFirst().findAll { p ->
             if (!p."$conditionNode") return
             p."${conditionNode}"[0].text().equals(oldValue)
@@ -44,11 +48,28 @@ class XQL {
             p."${nodeToUpdate}"[0].value = newValue
         }
         def stringWriter = new StringWriter()
-        def nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter),"")
+        def nodePrinter = new XmlNodePrinter(new PrintWriter(stringWriter), "")
         nodePrinter.setNamespaceAware(true)
         nodePrinter.print(xml)
         def newXml = stringWriter.toString().readLines().join()
         return newXml
+    }
+
+    String queryKeepNameSpaces() {
+        def doc = DOMBuilder.parse(new StringReader(xmlString),false,true)
+        def root = doc.documentElement
+        use(DOMCategory) {
+            root.depthFirst().findAll {node->
+                if(!node."$conditionNode") return
+                node."${conditionNode}".text().equals(oldValue)
+            }.each {node->
+                node."${nodeToUpdate}"*.value = newValue
+            }
+        }
+        def result = XmlUtil.serialize(root).trim()
+//        windows appends \r to new line so we need to remove
+        result = result.replaceAll("\\r","")
+        return result
     }
 
     def select(String node) {
