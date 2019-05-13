@@ -19,23 +19,7 @@ class XQL {
 //
     }
 
-/*
-    String query() {
-        def xml = new XmlParser().parseText(xmlString)
-        xml."$rootNode".findAll { p ->
-            if (!p."$conditionNode") return
-            p."${conditionNode}"[0].text().equals(oldValue)
-        }.each { p ->
-            p."${nodeToUpdate}"[0].value = newValue
-        }
-        def stringWriter = new StringWriter()
-        new XmlNodePrinter(new PrintWriter(stringWriter)).print(xml)
-        def newXml = stringWriter.toString()
-        return newXml
-    }
-*/
-
-    String query() {
+    String queryFormated() {
         def xml = new XmlParser().parseText(xmlString)
         xml.depthFirst().findAll { p ->
             if (!p."$conditionNode") return
@@ -51,7 +35,7 @@ class XQL {
         return newXml
     }
 
-    String queryOneString() {
+    String queryAsOneString() {
         def xml = new XmlParser().parseText(xmlString)
         xml.depthFirst().findAll { p ->
             if (!p."$conditionNode") return
