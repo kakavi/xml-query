@@ -56,28 +56,38 @@ class XQL {
     }
 
     String queryKeepNameSpaces() {
-        def doc = DOMBuilder.parse(new StringReader(xmlString),false,true)
+        def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
         def root = doc.documentElement
         use(DOMCategory) {
-            root.depthFirst().findAll {node->
-                if(!node."$conditionNode") return
+            root.depthFirst().findAll { node ->
+                if (!node."$conditionNode") return
                 node."${conditionNode}".text().equals(oldValue)
-            }.each {node->
+            }.each { node ->
                 node."${nodeToUpdate}"*.value = newValue
             }
         }
         def result = XmlUtil.serialize(root).trim()
 //        windows appends \r to new line so we need to remove
-        result = result.replaceAll("\\r","")
+        result = result.replaceAll("\\r", "")
         return result
     }
 
-    String selectValue(){
+    String selectWhere() {
         def xml = new XmlParser(false, true).parseText(xmlString)
-        return xml.depthFirst().find {node->
-            if(!node."$conditionNode") return
-            node."${conditionNode}"[0].text().equals(oldValue)
+        return xml.depthFirst().find { node ->
+            if (!node."$conditionNode") return
+            if (conditionNode) {
+                node."${conditionNode}"[0].text().equals(oldValue)
+            }
         }."${conditionNode}"[0].text()
+    }
+
+    String selectValue() {
+        def xml = new XmlParser(false, true).parseText(xmlString)
+        return xml.depthFirst().find { node ->
+            if (!node."$selectNode") return
+            node."${selectNode}"
+        }."${selectNode}".text()
     }
 
     def select(String node) {

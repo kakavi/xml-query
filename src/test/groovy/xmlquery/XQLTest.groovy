@@ -299,9 +299,26 @@ female
                         .from(cleanXml)
                         .where("__code")
                         .isEqualTo("MAS/KIM/0002")
-                        .selectValue()
+                        .selectWhere()
         assertTrue "MAS/KIM/0002" == xql
 
+    }
+
+    @Test
+    void testQueryWithoutWhereClause(){
+        def cleanXml = """<iics_survey_school_questionnaire_v1>
+                                <visit>baseline</visit>
+                                    <school_prompt>
+                                    <school_name>null</school_name>
+                                    <__code>MAS/KIM/0002</__code>
+                                </school_prompt>
+                        </iics_survey_school_questionnaire_v1>"""
+
+        def xql = new XQL()
+                .select("__code")
+                .from(cleanXml)
+                .selectValue()
+        assertTrue "MAS/KIM/0002" == xql
     }
 
 
