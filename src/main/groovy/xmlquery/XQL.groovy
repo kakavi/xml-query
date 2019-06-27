@@ -72,6 +72,14 @@ class XQL {
         return result
     }
 
+    String selectValue(){
+        def xml = new XmlParser(false, true).parseText(xmlString)
+        return xml.depthFirst().find {node->
+            if(!node."$conditionNode") return
+            node."${conditionNode}"[0].text().equals(oldValue)
+        }."${conditionNode}"[0].text()
+    }
+
     def select(String node) {
         this.selectNode = node
         return this
