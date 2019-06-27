@@ -1,2 +1,2 @@
 # xml-query
-Library to update and query xml file
+Groovy Library to update and query xml file
