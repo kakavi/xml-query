@@ -7,7 +7,8 @@ Groovy Library to update and query xml file
     * Modifying xml tag names
     
 ### Examples
-``` def originalXml = """<?xml version="1.0" encoding="UTF-8"?>
+``` 
+def originalXml = """<?xml version="1.0" encoding="UTF-8"?>
                         <iics_survey_school_questionnaire_v1>
                                 <visit>baseline</visit>
                                     <school_prompt>
@@ -17,7 +18,8 @@ Groovy Library to update and query xml file
                         </iics_survey_school_questionnaire_v1>"""
 ```
 to add <groupCode>FG12</groupCode> to the Original Xml,
- ```def result = new XQL()
+ ```
+ def result = new XQL()
                 .alterXML(sampleXml3)
                 .add("groupCode")
                 .withDefaultVal("FG12")
