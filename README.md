@@ -19,7 +19,7 @@ Groovy Library to update and query xml file
                         </iics_survey_school_questionnaire_v1>
 ```
 to add `<groupCode>FG12</groupCode>` to the Original Xml,
- ```
+ ```groovy
  def result = new XQL()
                 .alterXML(sampleXml3)
                 .add("groupCode")
@@ -54,10 +54,11 @@ to get the Value of __code tag;
 ```groovy
  def result = new XQL()
                 .select("__code")
-                .from(cleanXml)
+                .from(xml)
                 .selectValue()
  ```
  the above code will return `MAS/KIM/0002`
+ 
  To learn more how this library works please check out the unit Test.
 ## Installation
 
