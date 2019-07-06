@@ -25,6 +25,18 @@ to add `<groupCode>FG12</groupCode>` to the Original Xml,
                 .withDefaultVal("FG12")
                 .insertBefore("visit")
  ```
+ the new xml will be;
+ ```xml
+"""<?xml version="1.0" encoding="UTF-8"?>
+                        <iics_survey_school_questionnaire_v1>
+                                <groupCode>FG12</groupCode>
+                                <visit>baseline</visit>
+                                    <school_prompt>
+                                        <school_name>null</school_name>
+                                        <__code>MAS/KIM/0002</__code>
+                                    </school_prompt>
+                        </iics_survey_school_questionnaire_v1>"""
+```
  To learn more how this library works please check out the unit Test.
 ## Installation
 
