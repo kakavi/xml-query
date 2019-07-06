@@ -391,5 +391,45 @@ female
 
     }
 
+    @Test
+    void testAlterXMLModifyTag(){
+        def newXml = """<?xml version="1.0" encoding="UTF-8"?>
+                        <iics_survey_school_questionnaire_v1>
+                                <visitSchool>baseline</visitSchool>
+                                    <school_prompt>
+                                        <school_name>null</school_name>
+                                        <__code>MAS/KIM/0002</__code>
+                                    </school_prompt>
+                        </iics_survey_school_questionnaire_v1>"""
+        def result = new XQL()
+                .alterXML(sampleXml3)
+                .modify("visit")
+                .toNewName("visitSchool")
+                .executeModify()
+
+        assertTrue isSameXml(newXml,result)
+
+    }
+
+    @Test
+    void testAlterXMLModifyTagForInnerElement(){
+        def newXml = """<?xml version="1.0" encoding="UTF-8"?>
+                        <iics_survey_school_questionnaire_v1>
+                                <visit>baseline</visit>
+                                    <school_prompt>
+                                        <schoolName>null</schoolName>
+                                        <__code>MAS/KIM/0002</__code>
+                                    </school_prompt>
+                        </iics_survey_school_questionnaire_v1>"""
+        def result = new XQL()
+                .alterXML(sampleXml3)
+                .modify("school_name")
+                .toNewName("schoolName")
+                .executeModify()
+
+        assertTrue isSameXml(newXml,result)
+
+    }
+
 
 }

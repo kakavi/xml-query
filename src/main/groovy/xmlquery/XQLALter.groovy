@@ -3,24 +3,25 @@ package xmlquery
 import groovy.xml.DOMBuilder
 import groovy.xml.XmlUtil
 import groovy.xml.dom.DOMCategory
-import org.w3c.dom.Element
+import org.w3c.dom.NodeList
 
 class XQLALter {
     private String xmlString
-    private String nodeName
+    private String tagName
     private String defaultValue
+    private String newTagName
 
     XQLALter(String xmlString) {
         this.xmlString = xmlString
     }
 
-    def add(String nodeName){
-        this.nodeName = nodeName
+    def add(String tagName){
+        this.tagName = tagName
         return this
     }
 
-    def modify(String nodeName){
-        this.nodeName = nodeName
+    def modify(String tagName){
+        this.tagName = tagName
         return this
     }
 
@@ -37,7 +38,7 @@ class XQLALter {
             def bfNode = root.depthFirst().find {node->
                 node.name().equals(beforeNode)
             }
-            def newNode = doc.createElement(nodeName)
+            def newNode = doc.createElement(tagName)
             newNode.appendChild(doc.createTextNode(defaultValue))
             if(parentNode.equals("")){
                 root.insertBefore(newNode,bfNode)
@@ -55,7 +56,25 @@ class XQLALter {
         def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
         def root = doc.documentElement
         use(DOMCategory){
-            root.appendNode(nodeName,defaultValue)
+            root.appendNode(tagName,defaultValue)
+        }
+        def result = XmlUtil.serialize(root).trim()
+        result = result.replaceAll("\\r", "")
+        return result
+    }
+
+    def toNewName(String newTagName){
+        this.newTagName = newTagName
+        return this
+    }
+
+    def executeModify(){
+        def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
+        def root = doc.documentElement
+        use(DOMCategory){
+            doc.getElementsByTagName(tagName).each {element->
+                doc.renameNode(element,null,newTagName)
+            }
         }
         def result = XmlUtil.serialize(root).trim()
         result = result.replaceAll("\\r", "")
