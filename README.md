@@ -17,7 +17,7 @@ def originalXml = """<?xml version="1.0" encoding="UTF-8"?>
                                     </school_prompt>
                         </iics_survey_school_questionnaire_v1>"""
 ```
-to add <groupCode>FG12</groupCode> to the Original Xml,
+to add `<groupCode>FG12</groupCode>` to the Original Xml,
  ```
  def result = new XQL()
                 .alterXML(sampleXml3)
