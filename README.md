@@ -1,17 +1,18 @@
 # xml-query
 Groovy Library to update and query xml file
 
-# Dependency
+## Dependency
 
-## Maven
+### Maven
 
-`<dependency>
+``` 
+<dependency>
      <groupId>xml-query</groupId>
      <artifactId>xml-query</artifactId>
      <version>${version}</version>
 </dependency>
-`
+```
 
-## Gradle
+### Gradle
 
 `compile 'xml-query:xml-query:1.6.9'`
