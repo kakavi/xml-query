@@ -2,9 +2,9 @@
 Groovy Library to update and query xml file
 
 ## Features
-    - Querying Xml document using sql query like structure
-    - Adding elements to xml
-    - Modifying xml tag names
+    * Querying Xml document using sql query like structure
+    * Adding elements to xml
+    * Modifying xml tag names
 
 ## Installation
 
