@@ -100,6 +100,10 @@ class XQL {
         return this
     }
 
+    def alterXML(String xml) {
+        return new XQLALter(xml)
+    }
+
     def from(String xml) {
         this.xmlString = xml
         return this
@@ -125,5 +129,7 @@ class XQL {
         return this
     }
 
+    def add() {
 
+    }
 }

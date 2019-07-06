@@ -76,6 +76,15 @@ class XQLTest {
 <unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
 </issd_project_planting_returns_form_v1>"""
 
+
+    static String sampleXml3 = """<iics_survey_school_questionnaire_v1>
+                                <visit>baseline</visit>
+                                    <school_prompt>
+                                    <school_name>null</school_name>
+                                    <__code>MAS/KIM/0002</__code>
+                                </school_prompt>
+                        </iics_survey_school_questionnaire_v1>"""
+
     @Before
     void setUp() {
 //
@@ -130,7 +139,7 @@ female
 </issd_project_farmer_registration_form_v1>
 """
 
-        assertTrue isSameXml(newxml,expected)
+        assertTrue isSameXml(newxml, expected)
     }
 
     @Test
@@ -192,7 +201,7 @@ female
 <unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
 </issd_project_planting_returns_form_v1>"""
 
-        assertTrue isSameXml(newxml,expected)
+        assertTrue isSameXml(newxml, expected)
     }
 
     @Test
@@ -209,7 +218,7 @@ female
         def newxml = xql.queryAsOneString()
         println newxml
 
-        assertTrue isSameXml(newxml,expected)
+        assertTrue isSameXml(newxml, expected)
     }
 
     @Test
@@ -271,7 +280,7 @@ female
         def newxml = xql.queryAsOneString()
         println newxml
 
-        assertTrue isSameXml(newxml,expected)
+        assertTrue isSameXml(newxml, expected)
     }
 
     boolean isSameXml(String xml1, String xml2) {
@@ -285,7 +294,7 @@ female
     }
 
     @Test
-    void testQuerySelect(){
+    void testQuerySelect() {
         def cleanXml = """<iics_survey_school_questionnaire_v1>
                                 <visit>baseline</visit>
                                     <school_prompt>
@@ -295,17 +304,17 @@ female
                         </iics_survey_school_questionnaire_v1>"""
 
         def xql = new XQL()
-                        .select("__code")
-                        .from(cleanXml)
-                        .where("__code")
-                        .isEqualTo("MAS/KIM/0002")
-                        .selectWhere()
+                .select("__code")
+                .from(cleanXml)
+                .where("__code")
+                .isEqualTo("MAS/KIM/0002")
+                .selectWhere()
         assertTrue "MAS/KIM/0002" == xql
 
     }
 
     @Test
-    void testQueryWithoutWhereClause(){
+    void testQueryWithoutWhereClause() {
         def cleanXml = """<iics_survey_school_questionnaire_v1>
                                 <visit>baseline</visit>
                                     <school_prompt>
@@ -319,6 +328,67 @@ female
                 .from(cleanXml)
                 .selectValue()
         assertTrue "MAS/KIM/0002" == xql
+    }
+
+    @Test
+    void testAlterXMLAdd(){
+        def newXml = """<?xml version="1.0" encoding="UTF-8"?>
+                        <iics_survey_school_questionnaire_v1>
+                                <visit>baseline</visit>
+                                    <school_prompt>
+                                        <school_name>null</school_name>
+                                        <__code>MAS/KIM/0002</__code>
+                                    </school_prompt>
+                                <groupCode>FG12</groupCode>
+                        </iics_survey_school_questionnaire_v1>"""
+        def result = new XQL()
+                .alterXML(sampleXml3)
+                .add("groupCode")
+                .withDefaultVal("FG12")
+                .execute()
+
+        assertTrue isSameXml(newXml,result)
+    }
+    @Test
+    void testAlterXMLInsertBefore() {
+        def newXml = """<?xml version="1.0" encoding="UTF-8"?>
+                        <iics_survey_school_questionnaire_v1>
+                                <groupCode>FG12</groupCode>
+                                <visit>baseline</visit>
+                                    <school_prompt>
+                                        <school_name>null</school_name>
+                                        <__code>MAS/KIM/0002</__code>
+                                    </school_prompt>
+                        </iics_survey_school_questionnaire_v1>"""
+        def result = new XQL()
+                .alterXML(sampleXml3)
+                .add("groupCode")
+                .withDefaultVal("FG12")
+                .insertBefore("visit")
+
+        assertTrue isSameXml(newXml,result)
+
+    }
+
+    @Test
+    void testAlterXMLInsertBeforeWithGroup(){
+        def newXml = """<?xml version="1.0" encoding="UTF-8"?>
+                        <iics_survey_school_questionnaire_v1>
+                                <visit>baseline</visit>
+                                    <school_prompt>
+                                        <school_name>null</school_name>
+                                        <groupCode>FG12</groupCode>
+                                        <__code>MAS/KIM/0002</__code>
+                                    </school_prompt>
+                        </iics_survey_school_questionnaire_v1>"""
+        def result = new XQL()
+                .alterXML(sampleXml3)
+                .add("groupCode")
+                .withDefaultVal("FG12")
+                .insertBefore("__code","school_prompt")
+
+        assertTrue isSameXml(newXml,result)
+
     }
 
 
