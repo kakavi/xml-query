@@ -75,3 +75,10 @@ to get the Value of __code tag;
 ### Gradle
 
 `compile 'xml-query:xml-query:${version}'`
+
+### Repository
+```
+repositories {
+    maven { url "http://omnitech.co.ug/m2/releases" }
+}
+```
