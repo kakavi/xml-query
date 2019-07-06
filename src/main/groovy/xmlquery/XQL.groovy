@@ -129,7 +129,4 @@ class XQL {
         return this
     }
 
-    def add() {
-
-    }
 }
