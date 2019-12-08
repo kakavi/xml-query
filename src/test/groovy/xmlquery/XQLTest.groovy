@@ -84,6 +84,39 @@ class XQLTest {
                                     <__code>MAS/KIM/0002</__code>
                                 </school_prompt>
                         </iics_survey_school_questionnaire_v1>"""
+    static String sampleXml4 = """<?xml version="1.0" encoding="UTF-8"?><issd_project_farmer_registration_form_v1 formKey="issd_project_farmer_registration_form_v1" id="9" name="Farmer Registration form">
+  <lsb_search>
+    <lsb/>
+    <name>Amatura Cooperative</name>
+    <lsb_code>WMO6039</lsb_code>
+    <partner>CEFORD</partner>
+    <district>buhweju</district>
+    <subcounty>bihanga</subcounty>
+  </lsb_search>
+  <farmer_details>
+    <farmer_name>AMBAYO JOACHIM</farmer_name>
+    <sex>male</sex>
+    <age>1964-01-01</age>
+  </farmer_details>
+  <zone_farmer>westnile</zone_farmer>
+  <district_farmer>moyo</district_farmer>
+  <subcountry_farmer>moyo</subcountry_farmer>
+  <parish>Vurra</parish>
+  <village>Vurra opi</village>
+  <type_farmer>general_farmer</type_farmer>
+  <date>2018-07-30 03:14:14 PM</date>
+  <unique_id>uuid:6d4fa225-02da-4af7-a91e-85cc41494719</unique_id>
+  <farmerid2/>
+  <meta>
+    <__start>2018-07-30T15:14:14.483EAT</__start>
+    <__end>2018-07-30T15:14:14.483EAT</__end>
+    <__today>2018-07-30</__today>
+    <instanceID>uuid:aebe3d89-9bce-440d-a912-9afd3fdaf2be</instanceID>
+    <__reviewed/>
+    <__reviewedBy/>
+  </meta>
+</issd_project_farmer_registration_form_v1>
+                                """
 
     @Before
     void setUp() {
@@ -144,13 +177,6 @@ female
 
     @Test
     void testUpdateFormDataWithRepeats() {
-        def xql = new XQL('planting_returns')
-                .update(xmlWithRepeats.trim().replaceAll("\n", ""))
-                .set('district')
-                .to('kakabouy')
-                .where('__code')
-                .isEqualTo('WPK6063/0003')
-        def newxml = xql.queryKeepNameSpaces()
 
         def expected = """<issd_project_planting_returns_form_v1 id="13" name="Planting Returns Form">
 <instruction/>
@@ -200,6 +226,78 @@ female
 <date>2019-04-30 01:24:51 PM</date>
 <unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
 </issd_project_planting_returns_form_v1>"""
+
+        def xql = new XQL('planting_returns')
+                .update(xmlWithRepeats.trim().replaceAll("\n", ""))
+                .set('district')
+                .to('kakabouy')
+                .where('__code')
+                .isEqualTo('WPK6063/0003')
+        def newxml = xql.queryKeepNameSpaces()
+
+        assertTrue isSameXml(newxml, expected)
+    }
+
+
+    @Test
+    void testUpdateFormDataWithRepeatsOn2ndRepeat() {
+
+        def expected = """<issd_project_planting_returns_form_v1 id="13" name="Planting Returns Form">
+<instruction/>
+<season>_2019a</season>
+<crop>cassava</crop>
+<variety_cassava>narocase_1</variety_cassava>
+<seed_class>foundation_seed</seed_class>
+<planting_returns>
+<farmer/>
+<farmer_name>Owiny Bruno</farmer_name>
+<__code>WPK6063/0003</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>pakwach</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>1.0</arceage>
+<quantity_planted_bags>6.0</quantity_planted_bags>
+<planting_date>2019-04-06</planting_date>
+</planting_returns>
+<planting_returns>
+<farmer/>
+<farmer_name>Alli Quirino</farmer_name>
+<__code>WPK6063/0006</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>kakabouy</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>1.0</arceage>
+<quantity_planted_bags>6.0</quantity_planted_bags>
+<planting_date>2019-04-09</planting_date>
+</planting_returns>
+<planting_returns>
+<farmer/>
+<farmer_name>BLOCK_Pokwero</farmer_name>
+<__code>WPK6063/0046</__code>
+<lsb_name>Pokwero</lsb_name>
+<partner>WENIPS</partner>
+<district>pakwach</district>
+<subcounty>panyango</subcounty>
+<zone>westnile</zone>
+<arceage>8.0</arceage>
+<quantity_planted_bags>48.0</quantity_planted_bags>
+<planting_date>2019-04-03</planting_date>
+</planting_returns>
+<date>2019-04-30 01:24:51 PM</date>
+<unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
+</issd_project_planting_returns_form_v1>"""
+
+        def xql = new XQL('planting_returns')
+                .update(xmlWithRepeats.trim().replaceAll("\n", ""))
+                .set('district')
+                .to('kakabouy')
+                .where('__code')
+                .isEqualTo('WPK6063/0006')
+        def newxml = xql.queryKeepNameSpaces()
 
         assertTrue isSameXml(newxml, expected)
     }
@@ -409,6 +507,98 @@ female
 
         assertTrue isSameXml(newXml,result)
 
+    }
+
+    @Test
+    void testUpdateXmlWithNodesHavingDomKeywords(){
+        def newXml = """<?xml version="1.0" encoding="UTF-8"?><issd_project_farmer_registration_form_v1 formKey="issd_project_farmer_registration_form_v1" id="9" name="Farmer Registration form">
+  <lsb_search>
+    <lsb/>
+    <name>Amatura CooperativeTest12</name>
+    <lsb_code>WMO6039</lsb_code>
+    <partner>CEFORD</partner>
+    <district>buhweju</district>
+    <subcounty>bihanga</subcounty>
+  </lsb_search>
+  <farmer_details>
+    <farmer_name>AMBAYO JOACHIM</farmer_name>
+    <sex>male</sex>
+    <age>1964-01-01</age>
+  </farmer_details>
+  <zone_farmer>westnile</zone_farmer>
+  <district_farmer>moyo</district_farmer>
+  <subcountry_farmer>moyo</subcountry_farmer>
+  <parish>Vurra</parish>
+  <village>Vurra opi</village>
+  <type_farmer>general_farmer</type_farmer>
+  <date>2018-07-30 03:14:14 PM</date>
+  <unique_id>uuid:6d4fa225-02da-4af7-a91e-85cc41494719</unique_id>
+  <farmerid2/>
+  <meta>
+    <__start>2018-07-30T15:14:14.483EAT</__start>
+    <__end>2018-07-30T15:14:14.483EAT</__end>
+    <__today>2018-07-30</__today>
+    <instanceID>uuid:aebe3d89-9bce-440d-a912-9afd3fdaf2be</instanceID>
+    <__reviewed/>
+    <__reviewedBy/>
+  </meta>
+</issd_project_farmer_registration_form_v1>
+                """
+        def result = new XQL()
+                .update(sampleXml4.trim())
+                .set('name')
+                .to('Amatura CooperativeTest12')
+                .where('name')
+                .isEqualTo('Amatura Cooperative')
+                .queryKeepNameSpaces()
+
+        assertTrue isSameXml(newXml,result)
+    }
+
+    @Test
+    void testUpdateXmlWithNameSpaceMissing(){
+        def newXml = """<?xml version="1.0" encoding="UTF-8"?><issd_project_farmer_registration_form_v1 formKey="issd_project_farmer_registration_form_v1" id="9" name="Farmer Registration form">
+  <lsb_search>
+    <lsb/>
+    <name>Amatura Cooperative</name>
+    <lsb_code>WMO60399</lsb_code>
+    <partner>CEFORD</partner>
+    <district>buhweju</district>
+    <subcounty>bihanga</subcounty>
+  </lsb_search>
+  <farmer_details>
+    <farmer_name>AMBAYO JOACHIM</farmer_name>
+    <sex>male</sex>
+    <age>1964-01-01</age>
+  </farmer_details>
+  <zone_farmer>westnile</zone_farmer>
+  <district_farmer>moyo</district_farmer>
+  <subcountry_farmer>moyo</subcountry_farmer>
+  <parish>Vurra</parish>
+  <village>Vurra opi</village>
+  <type_farmer>general_farmer</type_farmer>
+  <date>2018-07-30 03:14:14 PM</date>
+  <unique_id>uuid:6d4fa225-02da-4af7-a91e-85cc41494719</unique_id>
+  <farmerid2/>
+  <meta>
+    <__start>2018-07-30T15:14:14.483EAT</__start>
+    <__end>2018-07-30T15:14:14.483EAT</__end>
+    <__today>2018-07-30</__today>
+    <instanceID>uuid:aebe3d89-9bce-440d-a912-9afd3fdaf2be</instanceID>
+    <__reviewed/>
+    <__reviewedBy/>
+  </meta>
+</issd_project_farmer_registration_form_v1>
+                """
+        def result = new XQL()
+                .update(sampleXml4.trim())
+                .set('lsb_code')
+                .to('WMO60399')
+                .where('lsb_code')
+                .isEqualTo('WMO6039')
+                .queryKeepNameSpaces()
+
+        assertTrue isSameXml(newXml,result)
     }
 
     @Test

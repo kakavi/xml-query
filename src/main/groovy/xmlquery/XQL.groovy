@@ -3,6 +3,8 @@ package xmlquery
 import groovy.xml.DOMBuilder
 import groovy.xml.XmlUtil
 import groovy.xml.dom.DOMCategory
+import org.w3c.dom.Element
+import org.w3c.dom.Node
 
 class XQL {
 
@@ -59,11 +61,13 @@ class XQL {
         def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
         def root = doc.documentElement
         use(DOMCategory) {
-            root.depthFirst().findAll { node ->
-                if (!node."$conditionNode") return
-                node."${conditionNode}".text().equals(oldValue)
-            }.each { node ->
-                node."${nodeToUpdate}"*.value = newValue
+            def nodesToChange = root.depthFirst().findAll { node ->
+                if (!node."'$conditionNode'" || ((Element)node).nodeName.equals(root.nodeName)) return
+                ((Element)node).getElementsByTagName(conditionNode).text().equals(oldValue)
+            }
+            nodesToChange.each { node ->
+                if(((Element)node).nodeName.equals(root.nodeName) && ((Element)node).nodeType!= Node.ELEMENT_NODE) return
+                ((Element)node).getElementsByTagName(nodeToUpdate).item(0).textContent = newValue
             }
         }
         def result = XmlUtil.serialize(root).trim()
@@ -72,6 +76,19 @@ class XQL {
         return result
     }
 
+    String queryKeepNameSpaces2() {
+        def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
+        def root = doc.documentElement
+        use(DOMCategory) {
+//            def nodesToChange = root.depthFirst().grep{it.text() == oldValue}
+            def nodesToChange = root.depthFirst().grep{it.text() == oldValue}
+            nodesToChange*.value = newValue
+        }
+        def result = XmlUtil.serialize(root).trim()
+//        windows appends \r to new line so we need to remove
+        result = result.replaceAll("\\r", "")
+        return result
+    }
     String selectWhere() {
         def xml = new XmlParser(false, true).parseText(xmlString)
         return xml.depthFirst().find { node ->
