@@ -5,6 +5,8 @@ import org.junit.Test
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.builder.Input
 
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
 class XQLTest {
@@ -76,14 +78,14 @@ class XQLTest {
 <unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
 </issd_project_planting_returns_form_v1>"""
 
-
     static String sampleXml3 = """<iics_survey_school_questionnaire_v1>
-                                <visit>baseline</visit>
+                                    <visit>baseline</visit>
                                     <school_prompt>
                                     <school_name>null</school_name>
                                     <__code>MAS/KIM/0002</__code>
                                 </school_prompt>
                         </iics_survey_school_questionnaire_v1>"""
+
     static String sampleXml4 = """<?xml version="1.0" encoding="UTF-8"?><issd_project_farmer_registration_form_v1 formKey="issd_project_farmer_registration_form_v1" id="9" name="Farmer Registration form">
   <lsb_search>
     <lsb/>
@@ -469,7 +471,7 @@ female
     }
 
     @Test
-    void testAlterXMLInsertBeforeWithGroup(){
+    void testAlterXMLInsertBeforeWithRepeat(){
         def newXml = """<?xml version="1.0" encoding="UTF-8"?>
                         <iics_survey_school_questionnaire_v1>
                                 <visit>baseline</visit>
@@ -621,5 +623,42 @@ female
 
     }
 
+    @Test
+    void testGroovyUnique(){
+        def users = [
+                ['id':'ab','sender':'kakav','receiver':'joel'],
+                ['id':'abc','sender':'kakav','receiver':'joel'],
+                ['id':'abcd','sender':'joel','receiver':'kakav'],
+                ['id':'abcd','sender':'joel','receiver':'samson'],
+                ['id':'abcd','sender':'joel','receiver':'brenda']
+        ]
+
+         def result = users.unique{[it.sender, it.receiver]}.unique {a,b->
+             if(a.sender.equals(b.receiver) && b.sender.equals(a.receiver)) return 0
+             return -1
+         }
+        println(result)
+        assertEquals(result.size(),3)
+    }
+
+    @Test
+    void testGroovyUnique2(){
+        def users = [
+                ['id':'ab','sender':'kakav','receiver':'joel'],
+                ['id':'abc','sender':'kakav','receiver':'joel'],
+                ['id':'abcd','sender':'joel','receiver':'kakav'],
+                ['id':'abcd','sender':'joel','receiver':'samson'],
+                ['id':'abcd','sender':'joel','receiver':'samson'],
+                ['id':'abcd','sender':'samson','receiver':'joel'],
+                ['id':'abcd','sender':'joel','receiver':'brenda']
+        ]
+
+        def result = users.unique{[it.sender, it.receiver]}.unique {a,b->
+            if(a.sender.equals(b.receiver) && b.sender.equals(a.receiver)) return 0
+            return -1
+        }
+        println(result)
+        assertEquals(result.size(),3)
+    }
 
 }

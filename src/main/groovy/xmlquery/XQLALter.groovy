@@ -30,7 +30,12 @@ class XQLALter {
         return this
     }
 
-
+/**
+ * Inserts a node before a specified node in an xml document.
+ * @param beforeNode the node that comes after the inserted node
+ * @param parentNode the immediate node in the hierarchy
+ * @return
+ */
     def insertBefore(String beforeNode,String parentNode=""){
         def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
         def root = doc.documentElement
