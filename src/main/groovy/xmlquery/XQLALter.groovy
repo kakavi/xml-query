@@ -57,6 +57,27 @@ class XQLALter {
         return result
     }
 
+    /**
+     * Inserts a Node as last element most especially in a repeat(group) node
+     * @param parentNode the immediate node in the hierarchy
+     * @return
+     */
+    def addToParentAsLast(String parentNode=""){
+        def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
+        def root = doc.documentElement
+        use(DOMCategory){
+            def parent = root.depthFirst().find {node->
+                node.name().equals(parentNode)
+            }
+            def newNode = doc.createElement(tagName)
+            newNode.appendChild(doc.createTextNode(defaultValue))
+            parent.appendChild(newNode)
+        }
+        def result = XmlUtil.serialize(root).trim()
+        result = result.replaceAll("\\r", "")
+        return result
+    }
+
     def execute(){
         def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
         def root = doc.documentElement

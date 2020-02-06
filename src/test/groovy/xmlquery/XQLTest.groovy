@@ -661,4 +661,150 @@ female
         assertEquals(result.size(),3)
     }
 
+    @Test
+    void testALterXMlAddToRepeatAsLastItem(){
+        def xmlToAlter = """<farm_study_baseline_form_v1 id="422" name="Baseline Form">
+  <instruction/>
+  <respondent_language>english</respondent_language>
+  <english/>
+  <farm_owner>
+    <cookstove_prompt/>
+    <farmer_name>Kareire Robert</farmer_name>
+    <district>Isingiro</district>
+    <subcounty>Ngarama</subcounty>
+  </farm_owner>
+  <income_source>cash_crops_crops_for_sale_dot_e_dot_g_dot_beanscorn_maize_dot_meat_and_live_animals_should_not_be_included dairy_products_milk_meat_live_animals</income_source>
+  <highest_source>cash_crops</highest_source>
+  <cattle_keeping_purpose>milk_products_for_sales milk_products_for_home_consumption meat_products_for_sales manure_as_a_fertilizer</cattle_keeping_purpose>
+  <breed>ankole_long_horned_sanga other</breed>
+  <breed_other>Cross breed of friesian</breed_other>
+  <confined>not</confined>
+  <feeding_milking_cows>yes</feeding_milking_cows>
+  <feeding_dry_cows>yes</feeding_dry_cows>
+  <feeding_dry_cow_yes>other</feeding_dry_cow_yes>
+  <feeding_dry_cow_yes_other>Fresh chopped nappier grass</feeding_dry_cow_yes_other>
+  <feeding_young_stock>yes</feeding_young_stock>
+  <feeding_young_stock_yes>other</feeding_young_stock_yes>
+  <feeding_young_stock_yes_other>Fresh chopped nappier grass</feeding_young_stock_yes_other>
+  <first_feeding>03:30:00 AM</first_feeding>
+  <second_feeding>04:00:00 PM</second_feeding>
+  <third_feeding/>
+  <first_milking>03:00:00 AM</first_milking>
+  <second_milking/>
+  <land_for_pasture>40.0</land_for_pasture>
+  <land_for_other_fodder>5.0</land_for_other_fodder>
+  <feed_with_residues>no</feed_with_residues>
+  <communal_grazing>no</communal_grazing>
+  <mineral_use>no</mineral_use>
+  <pesticide_use>no</pesticide_use>
+  <lime_application>no</lime_application>
+  <irrigation_application>no</irrigation_application>
+  <mechanisation_used>no</mechanisation_used>
+  <manure_management>
+    <manual_destination_pasture_excrete>50.0</manual_destination_pasture_excrete>
+    <manual_destination_pasture_fertilisation>0.0</manual_destination_pasture_fertilisation>
+    <manual_destination_fodder>0.0</manual_destination_fodder>
+    <manual_destination_arable>50.0</manual_destination_arable>
+    <manual_destination_burned>0</manual_destination_burned>
+    <manual_destination_construction>0.0</manual_destination_construction>
+    <manual_destination_sold>0.0</manual_destination_sold>
+    <manual_destination_discharged>0.0</manual_destination_discharged>
+    <manual_destination_other>0.0</manual_destination_other>
+  </manure_management>
+  <manual_destination_total_cal>100</manual_destination_total_cal>
+  <manure_store>
+    <manual_storage_applied>50.0</manual_storage_applied>
+    <manual_storage_discharged>0.0</manual_storage_discharged>
+    <manual_storage_slurry>0</manual_storage_slurry>
+    <manual_storage_heap>0.0</manual_storage_heap>
+    <manual_storage_comp>0.0</manual_storage_comp>
+    <manual_storage_digester>0.0</manual_storage_digester>
+    <manual_storage_other>50.0</manual_storage_other>
+  </manure_store>
+  <manual_storage_total_cal>100</manual_storage_total_cal>
+  <calves_separated>no</calves_separated>
+  <suckling_months>6</suckling_months>
+  <picture>/02/55/97/f7d12bd7-c436-43d7-aa5e-ce435053308a.jpg</picture>
+  <gps>-0.7781765,30.9540914,0.0</gps>
+  <date/>
+  <unique_id>uuid:266a98cf-4cd3-43a3-95ed-d839a65abc89</unique_id>
+</farm_study_baseline_form_v1>"""
+        def expected = """<farm_study_baseline_form_v1 id="422" name="Baseline Form">
+  <instruction/>
+  <respondent_language>english</respondent_language>
+  <english/>
+  <farm_owner>
+    <cookstove_prompt/>
+    <farmer_name>Kareire Robert</farmer_name>
+    <district>Isingiro</district>
+    <subcounty>Ngarama</subcounty>
+    <__code>kakabouy</__code>
+  </farm_owner>
+  <income_source>cash_crops_crops_for_sale_dot_e_dot_g_dot_beanscorn_maize_dot_meat_and_live_animals_should_not_be_included dairy_products_milk_meat_live_animals</income_source>
+  <highest_source>cash_crops</highest_source>
+  <cattle_keeping_purpose>milk_products_for_sales milk_products_for_home_consumption meat_products_for_sales manure_as_a_fertilizer</cattle_keeping_purpose>
+  <breed>ankole_long_horned_sanga other</breed>
+  <breed_other>Cross breed of friesian</breed_other>
+  <confined>not</confined>
+  <feeding_milking_cows>yes</feeding_milking_cows>
+  <feeding_dry_cows>yes</feeding_dry_cows>
+  <feeding_dry_cow_yes>other</feeding_dry_cow_yes>
+  <feeding_dry_cow_yes_other>Fresh chopped nappier grass</feeding_dry_cow_yes_other>
+  <feeding_young_stock>yes</feeding_young_stock>
+  <feeding_young_stock_yes>other</feeding_young_stock_yes>
+  <feeding_young_stock_yes_other>Fresh chopped nappier grass</feeding_young_stock_yes_other>
+  <first_feeding>03:30:00 AM</first_feeding>
+  <second_feeding>04:00:00 PM</second_feeding>
+  <third_feeding/>
+  <first_milking>03:00:00 AM</first_milking>
+  <second_milking/>
+  <land_for_pasture>40.0</land_for_pasture>
+  <land_for_other_fodder>5.0</land_for_other_fodder>
+  <feed_with_residues>no</feed_with_residues>
+  <communal_grazing>no</communal_grazing>
+  <mineral_use>no</mineral_use>
+  <pesticide_use>no</pesticide_use>
+  <lime_application>no</lime_application>
+  <irrigation_application>no</irrigation_application>
+  <mechanisation_used>no</mechanisation_used>
+  <manure_management>
+    <manual_destination_pasture_excrete>50.0</manual_destination_pasture_excrete>
+    <manual_destination_pasture_fertilisation>0.0</manual_destination_pasture_fertilisation>
+    <manual_destination_fodder>0.0</manual_destination_fodder>
+    <manual_destination_arable>50.0</manual_destination_arable>
+    <manual_destination_burned>0</manual_destination_burned>
+    <manual_destination_construction>0.0</manual_destination_construction>
+    <manual_destination_sold>0.0</manual_destination_sold>
+    <manual_destination_discharged>0.0</manual_destination_discharged>
+    <manual_destination_other>0.0</manual_destination_other>
+  </manure_management>
+  <manual_destination_total_cal>100</manual_destination_total_cal>
+  <manure_store>
+    <manual_storage_applied>50.0</manual_storage_applied>
+    <manual_storage_discharged>0.0</manual_storage_discharged>
+    <manual_storage_slurry>0</manual_storage_slurry>
+    <manual_storage_heap>0.0</manual_storage_heap>
+    <manual_storage_comp>0.0</manual_storage_comp>
+    <manual_storage_digester>0.0</manual_storage_digester>
+    <manual_storage_other>50.0</manual_storage_other>
+  </manure_store>
+  <manual_storage_total_cal>100</manual_storage_total_cal>
+  <calves_separated>no</calves_separated>
+  <suckling_months>6</suckling_months>
+  <picture>/02/55/97/f7d12bd7-c436-43d7-aa5e-ce435053308a.jpg</picture>
+  <gps>-0.7781765,30.9540914,0.0</gps>
+  <date/>
+  <unique_id>uuid:266a98cf-4cd3-43a3-95ed-d839a65abc89</unique_id>
+</farm_study_baseline_form_v1>"""
+
+        def result = new XQL()
+        .alterXML(xmlToAlter)
+        .add("__code")
+        .withDefaultVal("kakabouy")
+        .addToParentAsLast("farm_owner")
+        assertTrue isSameXml(expected,result)
+
+
+    }
+
 }
