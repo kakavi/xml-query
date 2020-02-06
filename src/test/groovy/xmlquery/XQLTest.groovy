@@ -6,7 +6,6 @@ import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.builder.Input
 
 import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
 class XQLTest {
@@ -801,7 +800,7 @@ female
         .alterXML(xmlToAlter)
         .add("__code")
         .withDefaultVal("kakabouy")
-        .addToParentAsLast("farm_owner")
+        .addToSubgroup("farm_owner")
         assertTrue isSameXml(expected,result)
 
 

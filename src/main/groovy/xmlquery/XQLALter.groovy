@@ -62,7 +62,7 @@ class XQLALter {
      * @param parentNode the immediate node in the hierarchy
      * @return
      */
-    def addToParentAsLast(String parentNode=""){
+    def addToSubgroup(String parentNode=""){
         def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
         def root = doc.documentElement
         use(DOMCategory){
