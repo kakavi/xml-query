@@ -60,7 +60,7 @@ uploadArchives {
     repositories {
         mavenDeployer {
             configuration = configurations.deployerJars
-            String repo = version.endsWith('SNAPSHOT') ? 'scp://omnitech.co.ug/home/maven/m2repo/snapshots' : 'scp://omnitech.co.ug/home/maven/m2repo/releases'
+            String repo = version.endsWith('SNAPSHOT') ? 'scp://issdugdata.net/home/maven/m2repo/snapshots' : 'scp://issdugdata.net/home/maven/m2repo/releases'
             repository(url: repo) {
                 authentication(userName: project.findProperty('deployU') ?: "", password: project.findProperty('deployP') ?: "")
             }
