@@ -54,7 +54,6 @@ class XQL {
         nodePrinter.setNamespaceAware(true)
         nodePrinter.print(xml)
         def newXml = stringWriter.toString().readLines().join()
-        newXml = XmlUtil.serialize(newXml)
         return newXml
     }
 
@@ -66,9 +65,15 @@ class XQL {
                 if (!node."'$conditionNode'" || ((Element)node).nodeName.equals(root.nodeName)) return
                 ((Element)node).getElementsByTagName(conditionNode).text().equals(oldValue)
             }
-            nodesToChange.each { node ->
-                if(((Element)node).nodeName.equals(root.nodeName) && ((Element)node).nodeType!= Node.ELEMENT_NODE) return
-                ((Element)node).getElementsByTagName(nodeToUpdate).item(0).textContent = newValue
+            if(!nodesToChange.isEmpty()) {
+                nodesToChange.each { node ->
+                    if(((Element)node).nodeName.equals(root.nodeName) && ((Element)node).nodeType!= Node.ELEMENT_NODE) return
+                    ((Element)node).getElementsByTagName(nodeToUpdate).item(0).textContent = newValue
+                }
+            }else {
+//               get firstNode elements
+                nodesToChange = root.depthFirst().grep{it.text() == oldValue}
+                nodesToChange*.value = newValue
             }
         }
         def result = XmlUtil.serialize(root).trim()
@@ -77,19 +82,6 @@ class XQL {
         return result
     }
 
-    String queryKeepNameSpaces2() {
-        def doc = DOMBuilder.parse(new StringReader(xmlString), false, true)
-        def root = doc.documentElement
-        use(DOMCategory) {
-//            def nodesToChange = root.depthFirst().grep{it.text() == oldValue}
-            def nodesToChange = root.depthFirst().grep{it.text() == oldValue}
-            nodesToChange*.value = newValue
-        }
-        def result = XmlUtil.serialize(root).trim()
-//        windows appends \r to new line so we need to remove
-        result = result.replaceAll("\\r", "")
-        return result
-    }
     String selectWhere() {
         def xml = new XmlParser(false, true).parseText(xmlString)
         return xml.depthFirst().find { node ->

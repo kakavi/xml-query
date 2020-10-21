@@ -293,7 +293,7 @@ female
 <unique_id>uuid:30263fff-af7e-4443-a048-d1cc7a178afe</unique_id>
 </issd_project_planting_returns_form_v1>"""
 
-        def xql = new XQL('planting_returns')
+        def xql = new XQL()
                 .update(xmlWithRepeats.trim().replaceAll("\n", ""))
                 .set('district')
                 .to('kakabouy')
@@ -846,7 +846,7 @@ female
                 .to('UGA/LIR/0003')
                 .where('partner_id')
                 .isEqualTo('UGA/LIR/0002')
-                .queryAsOneString()
+                .queryKeepNameSpaces()
 
         println(result)
 
