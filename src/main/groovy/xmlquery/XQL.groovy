@@ -54,6 +54,7 @@ class XQL {
         nodePrinter.setNamespaceAware(true)
         nodePrinter.print(xml)
         def newXml = stringWriter.toString().readLines().join()
+        newXml = XmlUtil.serialize(newXml)
         return newXml
     }
 

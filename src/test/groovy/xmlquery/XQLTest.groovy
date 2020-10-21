@@ -1,5 +1,6 @@
 package xmlquery
 
+import groovy.xml.XmlUtil
 import org.junit.Before
 import org.junit.Test
 import org.xmlunit.builder.DiffBuilder
@@ -804,6 +805,52 @@ female
         assertTrue isSameXml(expected,result)
 
 
+    }
+
+    @Test
+    void testUpdateXmlWithNamespaces() {
+        def xmlToAlter = """<?xml version="1.0" encoding="UTF-8"?><craft_farmer_group_form_v1 xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="477" name="Farmer Group Form">
+<businesspartner_search/>
+<name_partner>Alito Joint Farmers Multipurpose Cooperative Society Ltd(AJOFMUCOS) test</name_partner>
+<partner_id>UGA/LIR/0002</partner_id>
+<value_chain>soybean</value_chain>
+<farmer_grp>Test Alito</farmer_grp>
+<country>uganda</country>
+<region>northern</region>
+<district>lira</district>
+<contact_person_tot>Test</contact_person_tot>
+<contact_number_tot/>
+<date_and_time_this_is_auto_filled>2020-10-21 08:11:49 AM</date_and_time_this_is_auto_filled>
+<unique_id>uuid:53fce2f2-4c3e-4bb3-a90a-39030e904478</unique_id>
+</craft_farmer_group_form_v1>
+        """
+
+        def expected = """<?xml version="1.0" encoding="UTF-8"?><craft_farmer_group_form_v1 xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="477" name="Farmer Group Form">
+<businesspartner_search/>
+<name_partner>Alito Joint Farmers Multipurpose Cooperative Society Ltd(AJOFMUCOS) test</name_partner>
+<partner_id>UGA/LIR/0003</partner_id>
+<value_chain>soybean</value_chain>
+<farmer_grp>Test Alito</farmer_grp>
+<country>uganda</country>
+<region>northern</region>
+<district>lira</district>
+<contact_person_tot>Test</contact_person_tot>
+<contact_number_tot/>
+<date_and_time_this_is_auto_filled>2020-10-21 08:11:49 AM</date_and_time_this_is_auto_filled>
+<unique_id>uuid:53fce2f2-4c3e-4bb3-a90a-39030e904478</unique_id>
+</craft_farmer_group_form_v1>
+        """
+        def result = new XQL()
+                .update(xmlToAlter.trim())
+                .set('partner_id')
+                .to('UGA/LIR/0003')
+                .where('partner_id')
+                .isEqualTo('UGA/LIR/0002')
+                .queryAsOneString()
+
+        println(result)
+
+        assertTrue isSameXml(expected,result)
     }
 
 }
