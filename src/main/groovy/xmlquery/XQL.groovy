@@ -62,19 +62,14 @@ class XQL {
         def root = doc.documentElement
         use(DOMCategory) {
             def nodesToChange = root.depthFirst().findAll { node ->
-                if (!node."'$conditionNode'" || ((Element)node).nodeName.equals(root.nodeName)) return
-                ((Element)node).getElementsByTagName(conditionNode).text().equals(oldValue)
+                if (!node."'$conditionNode'" ) return
+                ((Element) node).getElementsByTagName(conditionNode).text().equals(oldValue)
             }
-            if(!nodesToChange.isEmpty()) {
-                nodesToChange.each { node ->
-                    if(((Element)node).nodeName.equals(root.nodeName) && ((Element)node).nodeType!= Node.ELEMENT_NODE) return
-                    ((Element)node).getElementsByTagName(nodeToUpdate).item(0).textContent = newValue
-                }
-            }else {
-//               get firstNode elements
-                nodesToChange = root.depthFirst().grep{it.text() == oldValue}
-                nodesToChange*.value = newValue
+            nodesToChange.each { node ->
+                if (((Element) node).nodeName.equals(root.nodeName) && ((Element) node).nodeType != Node.ELEMENT_NODE) return
+                ((Element) node).getElementsByTagName(nodeToUpdate).item(0).textContent = newValue
             }
+
         }
         def result = XmlUtil.serialize(root).trim()
 //        windows appends \r to new line so we need to remove

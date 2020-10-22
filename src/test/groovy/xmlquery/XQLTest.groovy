@@ -852,5 +852,47 @@ female
 
         assertTrue isSameXml(expected,result)
     }
+    @Test
+    void testUpdateXmlWithNamespaces2() {
+        def xmlToAlter = """<?xml version='1.0' encoding='UTF-8'?>
+<craft_farmer_group_form_v1 formKey='craft_farmer_group_form_v1 ' id='400' name='Farmer Group Form'>
+  <name_partner>Alito Joint Farmers Multipurpose Cooperative Society Ltd(AJOFMUCOS)</name_partner>
+  <partner_id>UGA/LIR/0002</partner_id>
+  <value_chain>sesame</value_chain>
+  <farmer_grp>Can Dag Ming</farmer_grp>
+  <country>uganda</country>
+  <region>northern</region>
+  <district>agago</district>
+  <contact_person_tot>John Christopher Okwang</contact_person_tot>
+  <contact_number_tot>782295077</contact_number_tot>
+  <unique_id>18fc15a8-b923-48d0-bd4e-fb67ac1baa9a</unique_id>
+</craft_farmer_group_form_v1>
+        """
 
+        def expected = """<?xml version='1.0' encoding='UTF-8'?>
+<craft_farmer_group_form_v1 formKey='craft_farmer_group_form_v1 ' id='400' name='Farmer Group Form'>
+  <name_partner>Alito Joint Farmers Multipurpose Cooperative Society Ltd(AJOFMUCOS)</name_partner>
+  <partner_id>UGA/LIR/0002</partner_id>
+  <value_chain>soybean</value_chain>
+  <farmer_grp>Can Dag Ming</farmer_grp>
+  <country>uganda</country>
+  <region>northern</region>
+  <district>agago</district>
+  <contact_person_tot>John Christopher Okwang</contact_person_tot>
+  <contact_number_tot>782295077</contact_number_tot>
+  <unique_id>18fc15a8-b923-48d0-bd4e-fb67ac1baa9a</unique_id>
+</craft_farmer_group_form_v1>
+        """
+        def result = new XQL()
+                .update(xmlToAlter.trim())
+                .set('value_chain')
+                .to('soybean')
+                .where('partner_id')
+                .isEqualTo('UGA/LIR/0002')
+                .queryKeepNameSpaces()
+
+        println(result)
+
+        assertTrue isSameXml(expected,result)
+    }
 }
